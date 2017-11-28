@@ -6,6 +6,7 @@ import fr.aireisti.aircontest.models.Exercice;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import org.commonmark.renderer.Renderer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,11 +17,28 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Path("/exercice")
 public class ExerciceResource {
 
     private Session session;
+
+    private Exercice renderDescription(Exercice exercice, String markup) {
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(exercice.getDescription());
+        Renderer renderer = null;
+
+        if (markup.equals("html")) {
+            renderer = HtmlRenderer.builder().build();
+            exercice.setDescription(renderer.render(document));
+        } else if (!markup.equals("md")) {
+            throw new BadRequestException();
+        }
+
+        return exercice;
+    }
 
     @GET
     @Path("{id}")
@@ -33,15 +51,7 @@ public class ExerciceResource {
         if (exercice == null) {
             throw new NotFoundException();
         }
-        if (markup.equals("html")) {
-            Parser parser = Parser.builder().build();
-            Node document = parser.parse(exercice.getDescription());
-            HtmlRenderer renderer = HtmlRenderer.builder().build();
-            exercice.setDescription(renderer.render(document));
-        } else if (!markup.equals("md")) {
-            throw new BadRequestException();
-        }
-        return exercice;
+        return renderDescription(exercice, markup);
     }
 
     @POST
@@ -66,9 +76,9 @@ public class ExerciceResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Exercice> getExercices() {
+    public List<Exercice> getExercices(@DefaultValue("md") @QueryParam("markup") final String markup) {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices = session.createQuery("SELECT e FROM  Exercice e").list();
-        return exercices;
+        return exercices.stream().map(e -> renderDescription(e, markup)).collect(Collectors.toList());
     }
 }
