@@ -7,6 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import org.commonmark.renderer.Renderer;
+import org.commonmark.renderer.text.TextContentRenderer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -32,6 +33,9 @@ public class ExerciceResource {
 
         if (markup.equals("html")) {
             renderer = HtmlRenderer.builder().build();
+            exercice.setDescription(renderer.render(document));
+        } else if (markup.equals("txt")) {
+            renderer = TextContentRenderer.builder().build();
             exercice.setDescription(renderer.render(document));
         } else if (!markup.equals("md")) {
             throw new BadRequestException();
