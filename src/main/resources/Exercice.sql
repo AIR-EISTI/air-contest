@@ -1,7 +1,9 @@
 create table EXERCICE (
   id INT NOT NULL auto_increment,
-  title VARCHAR(30) default NULL,
-  description VARCHAR(500) default NULL,
+  title VARCHAR(200) DEFAULT NULL,
+  description TEXT DEFAULT NULL,
+  inputFile TEXT DEFAULT NULL,
+  outputFile TEXT DEFAULT NULL,
   state INT(4) NOT NULL,
   points INT DEFAULT NULL,
   tournament BOOLEAN DEFAULT 0,

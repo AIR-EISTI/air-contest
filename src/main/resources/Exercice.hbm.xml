@@ -16,6 +16,8 @@
 
         <property name="title" column="title" type="string"/>
         <property name="description" column="description" type="string"/>
+        <property name="inputFile" column="inputFile" type="string"/>
+        <property name="outputFile" column="outputFile" type="string"/>
         <property name="state" column="state">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">fr.aireisti.aircontest.models.State</param>

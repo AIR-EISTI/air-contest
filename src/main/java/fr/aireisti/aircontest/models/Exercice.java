@@ -1,19 +1,14 @@
 package fr.aireisti.aircontest.models;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import java.sql.DatabaseMetaData;
-import java.util.Date;
 
 @XmlRootElement
 public class Exercice {
     private int id;
     private String title;
     private String description;
-    //private File inputFile;
-    //private File outputFile;
+    private String inputFile;
+    private String outputFile;
     private State state;
     private int points;
     private boolean tournament;
@@ -43,23 +38,24 @@ public class Exercice {
     public String getDescription() {
         return description;
     }
-/*
-    public void setInputFile(File inputFile) {
+
+    public void setInputFile(String inputFile) {
         this.inputFile = inputFile;
     }
 
-    public void setOutputFile(File outputFile) {
+    public String getInputFile() {
+        return inputFile;
+    }
+
+    public void setOutputFile(String outputFile) {
         this.outputFile = outputFile;
     }
 
-    public File getOutputFile() {
+    public String getOutputFile() {
         return outputFile;
     }
 
-    public File getInputFile() {
-        return inputFile;
-    }
-*/
+
     public void setState(State state) {
         this.state = state;
     }
