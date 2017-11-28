@@ -14,12 +14,12 @@
 
         <!-- Assume test is the database name -->
         <property name = "hibernate.connection.url">
-            jdbc:mysql://localhost/test
+            jdbc:mysql://localhost/aircontest
         </property>
 
-        <property name = "hibernate.connection.username">root</property>
+        <property name = "hibernate.connection.username">aircontest</property>
 
-        <property name = "hibernate.connection.password">apache</property>
+        <property name = "hibernate.connection.password">aircontest</property>
 
         <property name="hibernate.current_session_context_class">
             thread

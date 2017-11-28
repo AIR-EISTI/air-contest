@@ -11,6 +11,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import org.commonmark.node.*;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+
 @Path("/exercice")
 public class ExerciceResource {
 
@@ -19,13 +23,21 @@ public class ExerciceResource {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Exercice getExerciceById(@PathParam("id") String id){
+    public Exercice getExerciceById(@PathParam("id") String id, @DefaultValue("md") @QueryParam("markup") String markup) {
         session = HibernateUtil.getSessionFactory().openSession();
         Query query = session.createQuery("SELECT e FROM  Exercice e WHERE id=:id");
         query.setParameter("id", Integer.parseInt(id));
         Exercice exercice = (Exercice) query.uniqueResult();
         if (exercice == null) {
             throw new NotFoundException();
+        }
+        if (markup.equals("html")) {
+            Parser parser = Parser.builder().build();
+            Node document = parser.parse(exercice.getDescription());
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
+            exercice.setDescription(renderer.render(document));
+        } else if (!markup.equals("md")) {
+            throw new BadRequestException();
         }
         return exercice;
     }
