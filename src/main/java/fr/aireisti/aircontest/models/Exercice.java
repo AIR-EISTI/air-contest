@@ -1,7 +1,11 @@
 package fr.aireisti.aircontest.models;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import java.sql.DatabaseMetaData;
+import java.util.Date;
 
 @XmlRootElement
 public class Exercice {
@@ -13,8 +17,8 @@ public class Exercice {
     private State state;
     private int points;
     private boolean tournament;
-    //private Date dateStart;
-    //private Date dateEnd;
+    private java.sql.Timestamp dateStart;
+    private java.sql.Timestamp dateEnd;
 
     public void setId(int id) {
         this.id = id;
@@ -64,7 +68,6 @@ public class Exercice {
         this.state = State.valueOf(state_str);
     }
 
-    @Enumerated(EnumType.ORDINAL)
     public State getState() {
         return state;
     }
@@ -84,21 +87,21 @@ public class Exercice {
     public boolean isTournament() {
         return tournament;
     }
-/*
-    public void setDateStart(Date dateStart) {
+
+    public void setDateStart(java.sql.Timestamp dateStart) {
         this.dateStart = dateStart;
     }
 
-    public Date getDateStart() {
+    public java.sql.Timestamp getDateStart() {
         return dateStart;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public void setDateEnd(java.sql.Timestamp dateEnd) {
         this.dateEnd = dateEnd;
     }
 
-    public Date getDateEnd(){
+    public java.sql.Timestamp getDateEnd(){
         return dateEnd;
     }
-    */
+
 }

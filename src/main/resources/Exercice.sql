@@ -5,6 +5,8 @@ create table EXERCICE (
   state INT(4) NOT NULL,
   points INT DEFAULT NULL,
   tournament BOOLEAN DEFAULT 0,
+  dateStart DATETIME DEFAULT NULL,
+  dateEnd DATETIME DEFAULT NULL,
   PRIMARY KEY (id)
 );
 DROP TABLE EXERCICE;

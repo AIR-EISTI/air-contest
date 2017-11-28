@@ -32,8 +32,7 @@ public class ExerciceResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Exercice postExercice(Exercice exercice){
-
+    public int postExercice(Exercice exercice){
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
 
@@ -48,6 +47,6 @@ public class ExerciceResource {
             session.close();
         }
 
-        return exercice;
+        return exercice.getId();
     }
 }
