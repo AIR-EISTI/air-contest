@@ -15,6 +15,8 @@ import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
+import java.util.List;
+
 @Path("/exercice")
 public class ExerciceResource {
 
@@ -60,5 +62,13 @@ public class ExerciceResource {
         }
 
         return "{\"id\":" + exercice.getId() + "}";
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Exercice> getExerciceById() {
+        session = HibernateUtil.getSessionFactory().openSession();
+        List<Exercice> exercices = session.createQuery("SELECT e FROM  Exercice e").list();
+        return exercices;
     }
 }
