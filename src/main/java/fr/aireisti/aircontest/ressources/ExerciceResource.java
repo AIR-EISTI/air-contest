@@ -66,7 +66,7 @@ public class ExerciceResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Exercice> getExerciceById() {
+    public List<Exercice> getExercices() {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices = session.createQuery("SELECT e FROM  Exercice e").list();
         return exercices;
