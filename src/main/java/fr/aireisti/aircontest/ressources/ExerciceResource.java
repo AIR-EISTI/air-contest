@@ -13,6 +13,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.Renderer;
 import org.commonmark.renderer.text.TextContentRenderer;
 
+import org.glassfish.jersey.message.internal.ReaderInterceptorExecutor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -80,8 +81,8 @@ public class ExerciceResource {
             session.save(exercice);
             tx.commit();
         } catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
+            if (tx != null) tx.rollback();
+            throw new InternalServerErrorException();
         } finally {
             session.close();
         }
@@ -127,4 +128,26 @@ public class ExerciceResource {
         String quantity = session.createQuery("SELECT COUNT(e) FROM Exercice e").uniqueResult().toString();
         return "{\"quantity\":" + quantity + "}";
     }
+
+    @DELETE
+    @Path("{id}")
+    public void deleteExerciceById(@PathParam("id") String id) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.createQuery("DELETE FROM Exercice e WHERE e.id = " + id).executeUpdate();
+        tx.commit();
+        session.close();
+    }
+
+    /*
+    @PATCH
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void patchExerciceById(@PathParam("id") String id, Exercice exercice){
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        tx.commit();
+        session.close();
+    }
+    */
 }
