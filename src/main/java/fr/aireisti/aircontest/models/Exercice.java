@@ -1,6 +1,11 @@
 package fr.aireisti.aircontest.models;
 
+import sun.util.calendar.BaseCalendar;
+
 import javax.xml.bind.annotation.XmlRootElement;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 @XmlRootElement
 public class Exercice {
@@ -12,8 +17,11 @@ public class Exercice {
     private State state;
     private int points;
     private boolean tournament;
-    private java.sql.Timestamp dateStart;
-    private java.sql.Timestamp dateEnd;
+    private java.sql.Timestamp creatingDate;
+
+    public Exercice() {
+        this.creatingDate = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -55,7 +63,6 @@ public class Exercice {
         return outputFile;
     }
 
-
     public void setState(State state) {
         this.state = state;
     }
@@ -84,20 +91,12 @@ public class Exercice {
         return tournament;
     }
 
-    public void setDateStart(java.sql.Timestamp dateStart) {
-        this.dateStart = dateStart;
+    public void setCreatingDate(java.sql.Timestamp creatingDate) {
+        this.creatingDate = creatingDate;
     }
 
-    public java.sql.Timestamp getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateEnd(java.sql.Timestamp dateEnd) {
-        this.dateEnd = dateEnd;
-    }
-
-    public java.sql.Timestamp getDateEnd(){
-        return dateEnd;
+    public java.sql.Timestamp getCreatingDate() {
+        return creatingDate;
     }
 
 }

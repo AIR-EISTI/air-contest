@@ -108,4 +108,14 @@ public class ExerciceResource {
         response.header("Content-Disposition", "attachment; filename=\"input_exercice_" + id + ".txt\"");
         return response.build();
     }
+
+    @GET
+    @Path("{id}/outputFile")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getOutput(@PathParam("id") String id) {
+        Exercice exercice = getExercice(Integer.parseInt(id));
+        Response.ResponseBuilder response = Response.ok(exercice.getOutputFile());
+        response.header("Content-Disposition", "attachment; filename=\"output_exercice_" + id + ".txt\"");
+        return response.build();
+    }
 }
