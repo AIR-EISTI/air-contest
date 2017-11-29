@@ -5,6 +5,7 @@ import fr.aireisti.aircontest.models.Exercice;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.commonmark.renderer.Renderer;
 import org.commonmark.renderer.text.TextContentRenderer;
@@ -18,7 +19,6 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Path("/exercice")
@@ -44,18 +44,28 @@ public class ExerciceResource {
         return exercice;
     }
 
-    @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Exercice getExerciceById(@PathParam("id") String id, @DefaultValue("md") @QueryParam("markup") String markup) {
+    private Exercice renderDatasetLink(Exercice exercice) {
+        exercice.setOutputFile("/api/exercice/" + exercice.getId() + "/outputFile");
+        exercice.setInputFile("/api/exercice/" + exercice.getId() + "/inputFile");
+        return exercice;
+    }
+
+    private Exercice getExercice(Integer id) {
         session = HibernateUtil.getSessionFactory().openSession();
         Query query = session.createQuery("SELECT e FROM  Exercice e WHERE id=:id");
-        query.setParameter("id", Integer.parseInt(id));
+        query.setParameter("id", id);
         Exercice exercice = (Exercice) query.uniqueResult();
         if (exercice == null) {
             throw new NotFoundException();
         }
-        return renderDescription(exercice, markup);
+        return exercice;
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Exercice getExerciceById(@PathParam("id") String id, @DefaultValue("md") @QueryParam("markup") String markup) {
+        return renderDatasetLink(renderDescription(getExercice(Integer.parseInt(id)), markup));
     }
 
     @POST
@@ -83,6 +93,19 @@ public class ExerciceResource {
     public List<Exercice> getExercices(@DefaultValue("md") @QueryParam("markup") final String markup) {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices = session.createQuery("SELECT e FROM  Exercice e").list();
-        return exercices.stream().map(e -> renderDescription(e, markup)).collect(Collectors.toList());
+        return exercices
+                .stream()
+                .map(e -> renderDatasetLink(renderDescription(e, markup)))
+                .collect(Collectors.toList());
+    }
+
+    @GET
+    @Path("{id}/inputFile")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getInput(@PathParam("id") String id) {
+        Exercice exercice = getExercice(Integer.parseInt(id));
+        Response.ResponseBuilder response = Response.ok(exercice.getInputFile());
+        response.header("Content-Disposition", "attachment; filename=\"input_exercice_" + id + ".txt\"");
+        return response.build();
     }
 }
