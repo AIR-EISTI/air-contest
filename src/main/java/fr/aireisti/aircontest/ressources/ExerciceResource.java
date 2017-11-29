@@ -7,16 +7,16 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.commonmark.node.*;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.Renderer;
 import org.commonmark.renderer.text.TextContentRenderer;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
-import org.commonmark.node.*;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,6 +70,7 @@ public class ExerciceResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public String postExercice(Exercice exercice){
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -84,7 +85,6 @@ public class ExerciceResource {
         } finally {
             session.close();
         }
-
         return "{\"id\":" + exercice.getId() + "}";
     }
 
@@ -117,5 +117,14 @@ public class ExerciceResource {
         Response.ResponseBuilder response = Response.ok(exercice.getOutputFile());
         response.header("Content-Disposition", "attachment; filename=\"output_exercice_" + id + ".txt\"");
         return response.build();
+    }
+
+    @GET
+    @Path("quantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getQuantity(){
+        session = HibernateUtil.getSessionFactory().openSession();
+        String quantity = session.createQuery("SELECT COUNT(e) FROM Exercice e").uniqueResult().toString();
+        return "{\"quantity\":" + quantity + "}";
     }
 }
