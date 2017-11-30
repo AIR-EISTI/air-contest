@@ -7,7 +7,7 @@
     <class name = "fr.aireisti.aircontest.models.Exercice" table="EXERCICE">
 
         <meta attribute = "class-description">
-            This class contains the employee detail.
+            This class contains the Exerice detail.
         </meta>
 
         <id name = "id" type = "int" column = "id">
