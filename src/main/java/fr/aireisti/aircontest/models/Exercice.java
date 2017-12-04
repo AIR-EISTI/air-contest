@@ -1,13 +1,11 @@
 package fr.aireisti.aircontest.models;
 
-import sun.util.calendar.BaseCalendar;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Timestamp;
+import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Timestamp;
 
-@XmlRootElement
+@Entity
+@Table(name = "EXERCICE", catalog = "aircontest")
 public class Exercice {
     private int id;
     private String title;
@@ -17,7 +15,7 @@ public class Exercice {
     private State state;
     private int points;
     private boolean tournament;
-    private java.sql.Timestamp creatingDate;
+    private Timestamp creatingDate;
 
     public Exercice() {
         this.creatingDate = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
@@ -27,6 +25,9 @@ public class Exercice {
         this.id = id;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return id;
     }
@@ -35,6 +36,7 @@ public class Exercice {
         this.title = title;
     }
 
+    @Column(name = "title", nullable = false, length = 200)
     public String getTitle() {
         return title;
     }
@@ -43,6 +45,7 @@ public class Exercice {
         this.description = description;
     }
 
+    @Column(name = "description", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -51,6 +54,7 @@ public class Exercice {
         this.inputFile = inputFile;
     }
 
+    @Column(name = "inputFile", nullable = false)
     public String getInputFile() {
         return inputFile;
     }
@@ -59,6 +63,7 @@ public class Exercice {
         this.outputFile = outputFile;
     }
 
+    @Column(name = "outputFile", nullable = false)
     public String getOutputFile() {
         return outputFile;
     }
@@ -67,6 +72,7 @@ public class Exercice {
         this.points = points;
     }
 
+    @Column(name = "points", nullable = false)
     public int getPoints() {
         return points;
     }
@@ -75,6 +81,7 @@ public class Exercice {
         this.tournament = tournament;
     }
 
+    @Column(name = "tournament")
     public boolean isTournament() {
         return tournament;
     }
@@ -83,7 +90,8 @@ public class Exercice {
         this.creatingDate = creatingDate;
     }
 
-    public java.sql.Timestamp getCreatingDate() {
+    @Column(name = "creatingDate")
+    public Timestamp getCreatingDate() {
         return creatingDate;
     }
 

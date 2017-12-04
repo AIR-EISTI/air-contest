@@ -29,7 +29,7 @@
             true
         </property>
 
-        <mapping resource="Exercice.hbm.xml"></mapping>
+        <mapping class="fr.aireisti.aircontest.models.Exercice"></mapping>
 
     </session-factory>
 </hibernate-configuration>
