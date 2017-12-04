@@ -18,11 +18,6 @@
         <property name="description" column="description" type="string"/>
         <property name="inputFile" column="inputFile" type="string"/>
         <property name="outputFile" column="outputFile" type="string"/>
-        <property name="state" column="state">
-            <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">fr.aireisti.aircontest.models.State</param>
-            </type>
-        </property>
         <property name="points" column="points" type="int"/>
         <property name="tournament" column="tournament" type="boolean"/>
         <property name="creatingDate" column="creatingDate" type="java.util.Date"/>

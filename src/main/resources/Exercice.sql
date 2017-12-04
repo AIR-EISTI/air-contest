@@ -4,7 +4,6 @@ create table EXERCICE (
   description TEXT DEFAULT NULL,
   inputFile TEXT DEFAULT NULL,
   outputFile TEXT DEFAULT NULL,
-  state INT(4) NOT NULL,
   points INT DEFAULT NULL,
   tournament BOOLEAN DEFAULT 0,
   creatingDate DATETIME DEFAULT CURRENT_TIMESTAMP,

@@ -13,7 +13,6 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.Renderer;
 import org.commonmark.renderer.text.TextContentRenderer;
 
-import org.glassfish.jersey.message.internal.ReaderInterceptorExecutor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -91,9 +90,26 @@ public class ExerciceResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Exercice> getExercices(@DefaultValue("md") @QueryParam("markup") final String markup) {
+    public List<Exercice> getExercices(@DefaultValue("md") @QueryParam("markup") final String markup,
+                                       @QueryParam("search") String search,
+                                       @QueryParam("start") Integer start,
+                                       @QueryParam("limit") Integer limit) {
         session = HibernateUtil.getSessionFactory().openSession();
-        List<Exercice> exercices = session.createQuery("SELECT e FROM  Exercice e").list();
+        List<Exercice> exercices;
+        if(search != null) {
+            String sql ="SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate ASC";
+            Query query = session.createQuery(sql);
+            query.setParameter("search", '%' + search + '%');
+            if (start == null) {
+                start = 0;
+            }
+            if (limit == null){
+                limit = 11;
+            }
+            exercices = query.setFirstResult(start).setMaxResults(limit).list();
+        } else {
+            exercices = session.createQuery("SELECT e FROM  Exercice e").list();
+        }
         return exercices
                 .stream()
                 .map(e -> renderDatasetLink(renderDescription(e, markup)))
@@ -139,15 +155,25 @@ public class ExerciceResource {
         session.close();
     }
 
-    /*
-    @PATCH
+    @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void patchExerciceById(@PathParam("id") String id, Exercice exercice){
+    public void patchExerciceById(Exercice exercice, @PathParam("id") Integer id){
         session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        tx.commit();
-        session.close();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            exercice.setId(id);
+            session.update(exercice);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+            throw new InternalServerErrorException();
+        } finally {
+            session.close();
+        }
     }
-    */
+
+
 }

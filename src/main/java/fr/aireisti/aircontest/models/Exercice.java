@@ -63,18 +63,6 @@ public class Exercice {
         return outputFile;
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public void setState(String state_str) {
-        this.state = State.valueOf(state_str);
-    }
-
-    public State getState() {
-        return state;
-    }
-
     public void setPoints(int points) {
         this.points = points;
     }
