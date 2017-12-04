@@ -1,12 +1,14 @@
 package fr.aireisti.aircontest.models;
 
+import fr.aireisti.aircontest.ressources.InitModel;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "EXERCICE", catalog = "aircontest")
-public class Exercice {
+public class Exercice implements InitModel{
     private int id;
     private String title;
     private String description;

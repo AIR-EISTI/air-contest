@@ -72,20 +72,7 @@ public class ExerciceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String postExercice(Exercice exercice){
-        session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = null;
-
-        try {
-            tx = session.beginTransaction();
-            session.save(exercice);
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
-            throw new InternalServerErrorException();
-        } finally {
-            session.close();
-        }
-        return "{\"id\":" + exercice.getId() + "}";
+        return Serializable.saveObject(exercice);
     }
 
     @GET
@@ -147,10 +134,12 @@ public class ExerciceResource {
 
     @DELETE
     @Path("{id}")
-    public void deleteExerciceById(@PathParam("id") String id) {
+    public void deleteExerciceById(@PathParam("id") Integer id) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
-        session.createQuery("DELETE FROM Exercice e WHERE e.id = " + id).executeUpdate();
+        Query query = session.createQuery("DELETE FROM Exercice e WHERE e.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
         tx.commit();
         session.close();
     }
