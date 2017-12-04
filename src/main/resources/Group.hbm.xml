@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "fr.aireisti.aircontest.models.Group" table="GROUP_EXERCICE">
+
+        <meta attribute = "class-description">
+            This class contains the Group detail.
+        </meta>
+
+        <id name = "id" type = "int" column = "id">
+            <generator class="native"/>
+        </id>
+
+        <property name="name" column="name" type="string"/>
+        <property name="description" column="description" type="string"/>
+        <property name="publicationDate" column="publicationDate" type="java.util.Date"/>
+        <property name="endDate" column="endDate" type="java.util.Date"/>
+        <property name="points" column="points" type="int"/>
+    </class>
+</hibernate-mapping>
