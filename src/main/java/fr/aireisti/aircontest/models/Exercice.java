@@ -2,9 +2,7 @@ package fr.aireisti.aircontest.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import fr.aireisti.aircontest.utils.PkListDeserializer;
+import fr.aireisti.aircontest.utils.TagPkListDeserializer;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -14,7 +12,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "EXERCICE", catalog = "aircontest")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="id")
 public class Exercice implements InitModel {
     private int id;
     private String title;
@@ -24,7 +21,7 @@ public class Exercice implements InitModel {
     private int points;
     private boolean tournament;
     private Timestamp creatingDate;
-    @JsonDeserialize(using = PkListDeserializer.class)
+    @JsonDeserialize(using = TagPkListDeserializer.class)
     private Set<Tag> tags = new HashSet<Tag>(0);
 
     public Exercice() {

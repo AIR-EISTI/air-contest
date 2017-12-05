@@ -1,9 +1,6 @@
 package fr.aireisti.aircontest.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 
@@ -12,12 +9,11 @@ import java.util.Set;
 
 @Entity
 @Table(name="TAG", catalog = "aircontest")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="id")
 public class Tag {
     private Integer id;
     private String tag;
     private String color;
-    private Set<Exercice> exercices = new HashSet<Exercice>(0);
+    private Set<Exercice> exercices = new HashSet<>(0);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
