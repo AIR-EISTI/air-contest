@@ -21,6 +21,7 @@ public class GroupResource {
     public List<Group> getGroup(){
         session = HibernateUtil.getSessionFactory().openSession();
         List<Group> groups = session.createQuery("SELECT g FROM Group g").list();
+        session.close();
         return groups;
     }
 
@@ -42,6 +43,7 @@ public class GroupResource {
         if (group == null){
             throw new NotFoundException();
         }
+        session.close();
         return group;
     }
 
