@@ -1,4 +1,4 @@
-create table GROUP_EXERCICE (
+create table `GROUP` (
   id INT NOT NULL auto_increment,
   name VARCHAR(200) DEFAULT NULL,
   description TEXT DEFAULT NULL,
@@ -7,4 +7,4 @@ create table GROUP_EXERCICE (
   points INT DEFAULT NULL,
   PRIMARY KEY (id)
 );
-DROP TABLE GROUP_EXERCICE;
+DROP TABLE `GROUP`;

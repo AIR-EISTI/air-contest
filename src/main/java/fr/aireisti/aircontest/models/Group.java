@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "GROUP_EXERCICE", catalog = "aircontest")
+@Table(name = "GROUP", catalog = "aircontest")
 public class Group implements InitModel {
     private int id;
     private String name;
