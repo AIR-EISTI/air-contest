@@ -106,7 +106,7 @@ public class Exercice implements InitModel {
         return creatingDate;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "TAG_EXERCICE", catalog = "aircontest",
             joinColumns = { @JoinColumn(name = "exercice_id", nullable = false, updatable = false)},
             inverseJoinColumns = { @JoinColumn(name = "tag_id", nullable = false, updatable = false)}

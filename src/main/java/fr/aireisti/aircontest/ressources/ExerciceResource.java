@@ -55,6 +55,7 @@ public class ExerciceResource {
         Query query = session.createQuery("SELECT e FROM  Exercice e WHERE id=:id");
         query.setParameter("id", id);
         Exercice exercice = (Exercice) query.uniqueResult();
+        session.close();
         if (exercice == null) {
             throw new NotFoundException();
         }
@@ -72,7 +73,6 @@ public class ExerciceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String postExercice(Exercice exercice){
-        System.out.println(exercice);
         return Serializable.saveObject(exercice);
     }
 
@@ -95,6 +95,7 @@ public class ExerciceResource {
                         .setMaxResults(limit)
                         .list();
         }
+        session.close();
         return exercices
                 .stream()
                 .map(e -> renderDatasetLink(renderDescription(e, markup)))
@@ -133,6 +134,7 @@ public class ExerciceResource {
         Query query = session.createQuery(sql);
         query.setParameter("search", '%' + search + '%');
         String quantity = query.uniqueResult().toString();
+        session.close();
         return "{\"quantity\":" + quantity + "}";
     }
 
@@ -154,6 +156,4 @@ public class ExerciceResource {
     public void putExerciceById(Exercice exercice, @PathParam("id") Integer id){
         Serializable.updateObject(exercice, id);
     }
-
-
 }
