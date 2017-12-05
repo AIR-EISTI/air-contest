@@ -1,7 +1,9 @@
 package fr.aireisti.aircontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
+import fr.aireisti.aircontest.utils.GroupPkListDeserializer;
 import fr.aireisti.aircontest.utils.TagPkListDeserializer;
 
 import javax.persistence.*;
@@ -23,6 +25,8 @@ public class Exercice implements InitModel {
     private Timestamp creatingDate;
     @JsonDeserialize(using = TagPkListDeserializer.class)
     private Set<Tag> tags = new HashSet<Tag>(0);
+    @JsonDeserialize(using = GroupPkListDeserializer.class)
+    private Set<Group> groups = new HashSet<>(0);
 
     public Exercice() {
         this.creatingDate = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
@@ -113,5 +117,18 @@ public class Exercice implements InitModel {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "EXERCICE_GROUP", catalog = "aircontest",
+            joinColumns = {@JoinColumn(name = "exercice_id", nullable = false, updatable = false)},
+            inverseJoinColumns = { @JoinColumn(name = "group_id", nullable = false, updatable = false)}
+    )
+    public Set<Group> getGroups(){
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 }

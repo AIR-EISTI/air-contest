@@ -1,9 +1,14 @@
 package fr.aireisti.aircontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
+import fr.aireisti.aircontest.utils.GroupPkListDeserializer;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "GROUP", catalog = "aircontest")
@@ -14,6 +19,7 @@ public class Group implements InitModel {
     private java.sql.Timestamp publicationDate;
     private java.sql.Timestamp endDate;
     private int points;
+    private Set<Exercice> exercices = new HashSet<>(0);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,5 +75,15 @@ public class Group implements InitModel {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+    @JsonIgnore
+    public Set<Exercice> getExercices(){
+        return exercices;
+    }
+
+    public void setExercices(Set<Exercice> exercices){
+        this.exercices = exercices;
     }
 }
