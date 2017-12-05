@@ -85,7 +85,7 @@ public class ExerciceResource {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices;
         if(search != null) {
-            String sql ="SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate ASC";
+            String sql ="SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate DESC";
             Query query = session.createQuery(sql);
             query.setParameter("search", '%' + search + '%');
             if (start == null) {
