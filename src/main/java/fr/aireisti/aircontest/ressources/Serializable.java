@@ -20,6 +20,7 @@ public class Serializable {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
+            e.printStackTrace();
             throw new InternalServerErrorException();
         } finally {
             session.close();

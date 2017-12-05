@@ -1,23 +1,31 @@
 package fr.aireisti.aircontest.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import fr.aireisti.aircontest.utils.PkListDeserializer;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "EXERCICE", catalog = "aircontest")
-public class Exercice implements InitModel{
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="id")
+public class Exercice implements InitModel {
     private int id;
     private String title;
     private String description;
     private String inputFile;
     private String outputFile;
-    private State state;
     private int points;
     private boolean tournament;
     private Timestamp creatingDate;
+    @JsonDeserialize(using = PkListDeserializer.class)
+    private Set<Tag> tags = new HashSet<Tag>(0);
 
     public Exercice() {
         this.creatingDate = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
@@ -97,4 +105,16 @@ public class Exercice implements InitModel{
         return creatingDate;
     }
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "TAG_EXERCICE", catalog = "aircontest",
+            joinColumns = { @JoinColumn(name = "exercice_id", nullable = false, updatable = false)},
+            inverseJoinColumns = { @JoinColumn(name = "tag_id", nullable = false, updatable = false)}
+    )
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 }

@@ -72,6 +72,7 @@ public class ExerciceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String postExercice(Exercice exercice){
+        System.out.println(exercice);
         return Serializable.saveObject(exercice);
     }
 
