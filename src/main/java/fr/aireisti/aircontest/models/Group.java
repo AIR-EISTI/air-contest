@@ -2,10 +2,11 @@ package fr.aireisti.aircontest.models;
 
 import fr.aireisti.aircontest.ressources.InitModel;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
-@XmlRootElement
+@Entity
+@Table(name = "GROUP_EXERCICE", catalog = "aircontest")
 public class Group implements InitModel {
     private int id;
     private String name;
@@ -14,6 +15,9 @@ public class Group implements InitModel {
     private java.sql.Timestamp endDate;
     private int points;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return id;
     }
@@ -22,6 +26,7 @@ public class Group implements InitModel {
         this.id = id;
     }
 
+    @Column(name = "name", nullable = false, length = 200)
     public String getName() {
         return name;
     }
@@ -30,6 +35,7 @@ public class Group implements InitModel {
         this.name = name;
     }
 
+    @Column(name = "description", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -38,6 +44,7 @@ public class Group implements InitModel {
         this.description = description;
     }
 
+    @Column(name = "publicationDate", nullable = false)
     public Timestamp getPublicationDate() {
         return publicationDate;
     }
@@ -46,6 +53,7 @@ public class Group implements InitModel {
         this.publicationDate = publicationDate;
     }
 
+    @Column(name = "endDate", nullable = false)
     public Timestamp getEndDate() {
         return endDate;
     }
@@ -54,6 +62,7 @@ public class Group implements InitModel {
         this.endDate = endDate;
     }
 
+    @Column(name = "points", nullable = false)
     public int getPoints() {
         return points;
     }
