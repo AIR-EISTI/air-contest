@@ -84,19 +84,22 @@ public class ExerciceResource {
                                        @QueryParam("limit") Integer limit) {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices;
+        if (start == null) {
+                start = 0;
+        }
+        if (limit == null){
+            limit = 11;
+        }
         if(search != null) {
             String sql ="SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate DESC";
             Query query = session.createQuery(sql);
             query.setParameter("search", '%' + search + '%');
-            if (start == null) {
-                start = 0;
-            }
-            if (limit == null){
-                limit = 11;
-            }
             exercices = query.setFirstResult(start).setMaxResults(limit).list();
         } else {
-            exercices = session.createQuery("SELECT e FROM  Exercice e").list();
+            exercices = session.createQuery("SELECT e FROM  Exercice e")
+                        .setFirstResult(start)
+                        .setMaxResults(limit)
+                        .list();
         }
         return exercices
                 .stream()
