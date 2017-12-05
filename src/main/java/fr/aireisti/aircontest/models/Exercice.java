@@ -119,7 +119,7 @@ public class Exercice implements InitModel {
         this.tags = tags;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "EXERCICE_GROUP", catalog = "aircontest",
             joinColumns = {@JoinColumn(name = "exercice_id", nullable = false, updatable = false)},
             inverseJoinColumns = { @JoinColumn(name = "group_id", nullable = false, updatable = false)}
