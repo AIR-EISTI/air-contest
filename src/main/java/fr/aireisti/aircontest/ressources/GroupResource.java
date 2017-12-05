@@ -2,6 +2,7 @@ package fr.aireisti.aircontest.ressources;
 
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Group;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -54,5 +55,12 @@ public class GroupResource {
         query.executeUpdate();
         tx.commit();
         session.close();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void putGroupById(Group group, @PathParam("id") Integer id) {
+        Serializable.updateObject(group, id);
     }
 }

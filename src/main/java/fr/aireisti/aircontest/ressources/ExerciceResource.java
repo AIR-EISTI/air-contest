@@ -151,21 +151,8 @@ public class ExerciceResource {
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void patchExerciceById(Exercice exercice, @PathParam("id") Integer id){
-        session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = null;
-
-        try {
-            tx = session.beginTransaction();
-            exercice.setId(id);
-            session.update(exercice);
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
-            throw new InternalServerErrorException();
-        } finally {
-            session.close();
-        }
+    public void putExerciceById(Exercice exercice, @PathParam("id") Integer id){
+        Serializable.updateObject(exercice, id);
     }
 
 

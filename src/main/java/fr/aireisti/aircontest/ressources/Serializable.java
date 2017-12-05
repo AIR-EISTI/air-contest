@@ -27,4 +27,21 @@ public class Serializable {
         }
         return "{\"id\":" + object.getId() + "}";
     }
+
+    public static void updateObject(InitModel object, Integer id) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            object.setId(id);
+            session.update(object);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+            throw new InternalServerErrorException();
+        } finally {
+            session.close();
+        }
+    }
 }
