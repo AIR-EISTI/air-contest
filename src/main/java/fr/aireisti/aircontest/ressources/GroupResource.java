@@ -2,12 +2,10 @@ package fr.aireisti.aircontest.ressources;
 
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Group;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -18,9 +16,15 @@ public class GroupResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Group> getGroup(){
+    public List<Group> getGroup(@DefaultValue("") @QueryParam("search") String search){
         session = HibernateUtil.getSessionFactory().openSession();
-        List<Group> groups = session.createQuery("SELECT g FROM Group g").list();
+        String sql = "SELECT g FROM Group g ";
+        if (search != null){
+            sql += "WHERE g.name LIKE :search";
+        }
+        Query query = session.createQuery(sql);
+        query.setParameter("search", '%' + search + '%');
+        List<Group> groups = query.list();
         session.close();
         return groups;
     }
