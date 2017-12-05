@@ -6,6 +6,7 @@ import org.hibernate.Session;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/tag")
 public class TagResource {
@@ -13,7 +14,7 @@ public class TagResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Tag getTags(@PathParam("id") String id) {
+    public Tag getTag(@PathParam("id") String id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             Tag tag = session.get(Tag.class, Integer.parseInt(id));
@@ -26,5 +27,14 @@ public class TagResource {
         } finally {
             session.close();
         }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Tag> getTags() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Tag> tags = session.createQuery("SELECT t FROM Tag t").list();
+        session.close();
+        return tags;
     }
 }
