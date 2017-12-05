@@ -80,16 +80,10 @@ public class ExerciceResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Exercice> getExercices(@DefaultValue("md") @QueryParam("markup") final String markup,
                                        @QueryParam("search") String search,
-                                       @QueryParam("start") Integer start,
-                                       @QueryParam("limit") Integer limit) {
+                                       @DefaultValue("0") @QueryParam("start") Integer start,
+                                       @DefaultValue("11") @QueryParam("limit") Integer limit) {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices;
-        if (start == null) {
-                start = 0;
-        }
-        if (limit == null){
-            limit = 11;
-        }
         if(search != null) {
             String sql ="SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate DESC";
             Query query = session.createQuery(sql);
@@ -130,9 +124,15 @@ public class ExerciceResource {
     @GET
     @Path("quantity")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getQuantity(){
+    public String getQuantity(@DefaultValue("") @QueryParam("search") String search){
         session = HibernateUtil.getSessionFactory().openSession();
-        String quantity = session.createQuery("SELECT COUNT(e) FROM Exercice e").uniqueResult().toString();
+        String sql = "SELECT COUNT(e) FROM Exercice e ";
+        if (search != null){
+            sql += "WHERE e.title LIKE :search";
+        }
+        Query query = session.createQuery(sql);
+        query.setParameter("search", '%' + search + '%');
+        String quantity = query.uniqueResult().toString();
         return "{\"quantity\":" + quantity + "}";
     }
 
