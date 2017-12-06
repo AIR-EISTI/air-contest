@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `GROUP`;
 create table `GROUP` (
   id INT NOT NULL auto_increment,
   name VARCHAR(200) DEFAULT NULL,
@@ -7,4 +8,3 @@ create table `GROUP` (
   points INT DEFAULT NULL,
   PRIMARY KEY (id)
 );
-DROP TABLE `GROUP`;

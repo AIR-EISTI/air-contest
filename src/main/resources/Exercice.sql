@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS EXERCICE;
 create table EXERCICE (
   id INT NOT NULL auto_increment,
   title VARCHAR(200) DEFAULT NULL,
@@ -9,4 +10,3 @@ create table EXERCICE (
   creatingDate DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
-DROP TABLE EXERCICE;

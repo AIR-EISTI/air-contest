@@ -1,4 +1,4 @@
-DROP TABLE TAG;
+DROP TABLE IF EXISTS TAG;
 create table TAG (
   id INT NOT NULL auto_increment,
   color VARCHAR(6) DEFAULT NULL,
