@@ -69,4 +69,16 @@ public class GroupResource {
     public void putGroupById(Group group, @PathParam("id") Integer id) {
         Serializable.updateObject(group, id);
     }
+
+    @GET
+    @Path("quantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getQuantity(){
+        session = HibernateUtil.getSessionFactory().openSession();
+        String sql = "SELECT COUNT(g) FROM Group g ";
+        Query query = session.createQuery(sql);
+        String quantity = query.uniqueResult().toString();
+        session.close();
+        return "{\"quantity\":" + quantity + "}";
+    }
 }
