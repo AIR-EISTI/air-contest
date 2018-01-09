@@ -1,6 +1,7 @@
 package fr.aireisti.aircontest.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.aireisti.aircontest.ressources.InitModel;
 
 import javax.persistence.*;
 
@@ -9,8 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name="TAG", catalog = "aircontest")
-public class Tag {
-    private Integer id;
+public class Tag implements InitModel {
+    private int id;
     private String tag;
     private String color;
     private Set<Exercice> exercices = new HashSet<>(0);
@@ -18,11 +19,11 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
