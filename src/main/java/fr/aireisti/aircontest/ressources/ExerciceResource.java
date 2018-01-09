@@ -13,7 +13,6 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.Renderer;
 import org.commonmark.renderer.text.TextContentRenderer;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -81,19 +80,29 @@ public class ExerciceResource {
     public List<Exercice> getExercices(@DefaultValue("md") @QueryParam("markup") final String markup,
                                        @QueryParam("search") String search,
                                        @DefaultValue("0") @QueryParam("start") Integer start,
-                                       @DefaultValue("11") @QueryParam("limit") Integer limit) {
+                                       @DefaultValue("11") @QueryParam("limit") Integer limit,
+                                       @QueryParam("group") Integer group) {
         session = HibernateUtil.getSessionFactory().openSession();
         List<Exercice> exercices;
+        String sql = "";
+        String sqlEnd = "";
+        Query query;
+
+        if(group != null) {
+            sql = "SELECT a FROM Group b JOIN b.exercices a WHERE b.id = :group_number AND a.id IN (";
+            sqlEnd = ")";
+        }
         if(search != null) {
-            String sql ="SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate DESC";
-            Query query = session.createQuery(sql);
+            sql = sql + "SELECT e FROM  Exercice e WHERE e.title LIKE :search ORDER BY e.creatingDate DESC" + sqlEnd;
+            query = session.createQuery(sql);
+            if(group != null) query.setParameter("group_number", group);
             query.setParameter("search", '%' + search + '%');
             exercices = query.setFirstResult(start).setMaxResults(limit).list();
         } else {
-            exercices = session.createQuery("SELECT e FROM  Exercice e")
-                        .setFirstResult(start)
-                        .setMaxResults(limit)
-                        .list();
+            sql = sql + "SELECT e FROM  Exercice e" + sqlEnd;
+            query = session.createQuery(sql);
+            if(group != null) query.setParameter("group_number", group);
+            exercices = query.setFirstResult(start).setMaxResults(limit).list();
         }
         session.close();
         return exercices
