@@ -32,6 +32,7 @@
         <mapping class="fr.aireisti.aircontest.models.Exercice"></mapping>
         <mapping class="fr.aireisti.aircontest.models.Group"></mapping>
         <mapping class="fr.aireisti.aircontest.models.Tag"></mapping>
+        <mapping class="fr.aireisti.aircontest.models.Result"></mapping>
 
     </session-factory>
 </hibernate-configuration>
