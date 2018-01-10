@@ -12,6 +12,13 @@ import java.util.List;
 @Path("/tag")
 public class TagResource {
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String postTag(Tag tag) {
+        return Serializable.saveObject(tag);
+    }
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
