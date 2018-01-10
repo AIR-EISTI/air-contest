@@ -43,7 +43,7 @@ public class ExerciceResource {
         return exercice;
     }
 
-    private Exercice renderDatasetLink(Exercice exercice) {
+    public static Exercice renderDatasetLink(Exercice exercice) {
         exercice.setOutputFile("/api/exercice/" + exercice.getId() + "/outputFile");
         exercice.setInputFile("/api/exercice/" + exercice.getId() + "/inputFile");
         return exercice;

@@ -1,6 +1,9 @@
 package fr.aireisti.aircontest.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
+import fr.aireisti.aircontest.utils.ExercicePkDeserializer;
+import org.apache.commons.text.similarity.JaroWinklerDistance;
 
 import javax.persistence.*;
 
@@ -9,8 +12,13 @@ import javax.persistence.*;
 public class Result implements InitModel{
     private int id;
     private int point;
+    @JsonDeserialize(using = ExercicePkDeserializer.class)
     private Exercice exercice;
-    private String solution;
+    private String code;
+    private String output;
+
+    public Result() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +51,25 @@ public class Result implements InitModel{
     }
 
     @Transient
-    public String getSolution() {
-        return solution;
+    public String getCode() {
+        return code;
     }
 
-    public void setSolution(String solution) {
-        this.solution = solution;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Transient
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
+    }
+
+    public void computeAccuracy() {
+        JaroWinklerDistance distance = new JaroWinklerDistance();
+        setPoint((int) Math.floor(distance.apply(output, getExercice().getOutputFile())*100));
     }
 }

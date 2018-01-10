@@ -16,4 +16,8 @@
         <servlet-name>Air Contest Api</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>fr.aireisti.aircontest.jobs.WorkerListnener</listener-class>
+    </listener>
 </web-app>
