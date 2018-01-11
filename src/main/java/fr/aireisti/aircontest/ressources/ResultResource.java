@@ -22,19 +22,19 @@ public class ResultResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postResult(Result result){
         if (result.getCode() != null) {
-            String errorMsg = "{\"error\": \"Failed to create job\"}";
             String uuid;
             try {
                 Sender sender = new Sender();
                 uuid = sender.call("python", result.getCode(), result.getExercice().getInputFile());
+                JobRessource.addBroadcaster(uuid);
             } catch (IOException e) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMsg).build();
+                throw new InternalServerErrorException("Failed to create job");
             } catch (TimeoutException e) {
-                return Response.status(Response.Status.GATEWAY_TIMEOUT).entity(errorMsg).build();
+                throw new javax.ws.rs.ServiceUnavailableException("Failed to create job");
             }
 
             if (uuid == null) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMsg).build();
+                throw new InternalServerErrorException("Failed to create job");
             }
 
             return Response.accepted().entity("{\"jobId\":\"" + uuid + "\"}").build();
@@ -44,7 +44,7 @@ public class ResultResource {
             result.computeAccuracy();
             Serializable.saveObject(result);
         } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Either one of 'code' or 'output' must be not null.\"}").build();
+            throw new BadRequestException("Either one of 'code' or 'output' must be not null.");
         }
 
         result.setExercice(ExerciceResource.renderDatasetLink(result.getExercice()));
