@@ -6,7 +6,6 @@ create table EXERCICE (
   inputFile TEXT DEFAULT NULL,
   outputFile TEXT DEFAULT NULL,
   points INT DEFAULT NULL,
-  tournament BOOLEAN DEFAULT 0,
   creatingDate DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );

@@ -22,7 +22,6 @@ public class Exercice implements InitModel {
     private String inputFile;
     private String outputFile;
     private int points;
-    private boolean tournament;
     private Timestamp creatingDate;
     @JsonDeserialize(using = TagPkListDeserializer.class)
     private Set<Tag> tags = new HashSet<Tag>(0);
@@ -89,15 +88,6 @@ public class Exercice implements InitModel {
     @Column(name = "points", nullable = false)
     public int getPoints() {
         return points;
-    }
-
-    public void setTournament(boolean tournament) {
-        this.tournament = tournament;
-    }
-
-    @Column(name = "tournament")
-    public boolean isTournament() {
-        return tournament;
     }
 
     public void setCreatingDate(java.sql.Timestamp creatingDate) {
