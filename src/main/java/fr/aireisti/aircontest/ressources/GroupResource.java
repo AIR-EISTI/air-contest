@@ -16,15 +16,25 @@ public class GroupResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Group> getGroup(@DefaultValue("") @QueryParam("search") String search){
+    public List<Group> getGroup(@DefaultValue("") @QueryParam("search") String search,
+                                @DefaultValue("0") @QueryParam("tournament") Integer tournament){
         session = HibernateUtil.getSessionFactory().openSession();
         String sql = "SELECT g FROM Group g ";
-        if (search != null){
-            sql += "WHERE g.name LIKE :search";
+        if (tournament == 1){
+            sql += "WHERE publicationDate =(SELECT MAX(g.publicationDate) FROM Group g) AND g.endDate IS NOT NULL ORDER BY g.id DESC";
+        } else {
+            if (search != null){
+                sql += "WHERE g.name LIKE :search";
+            }
         }
         Query query = session.createQuery(sql);
-        query.setParameter("search", '%' + search + '%');
-        List<Group> groups = query.list();
+        List<Group> groups;
+        if (tournament == 1){
+            groups = query.setMaxResults(1).list();
+        } else {
+            query.setParameter("search", '%' + search + '%');
+            groups = query.list();
+        }
         session.close();
         return groups;
     }
