@@ -52,6 +52,7 @@ public class Result implements InitModel{
     }
 
     @Transient
+    @JsonIgnore
     public String getCode() {
         return code;
     }
@@ -61,6 +62,7 @@ public class Result implements InitModel{
     }
 
     @Transient
+    @JsonIgnore
     public String getOutput() {
         return output;
     }

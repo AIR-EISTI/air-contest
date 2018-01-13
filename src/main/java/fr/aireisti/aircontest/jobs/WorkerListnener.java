@@ -59,7 +59,6 @@ public class WorkerListnener implements ServletContextListener, Observer {
             result.setExercice(job.getExercice());
             result.setOutput(runnerResult.getStdout());
             result.computeAccuracy();
-            System.out.println("plo");
             Serializable.saveObject(result);
             if (result.getPoint() == 100) {
                 jobInfo.setMsgType(JobInfo.TYPE_INFO);
