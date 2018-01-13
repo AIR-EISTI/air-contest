@@ -37,6 +37,7 @@
         <mapping class="fr.aireisti.aircontest.models.Job"></mapping>
         <mapping class="fr.aireisti.aircontest.models.User"></mapping>
         <mapping class="fr.aireisti.aircontest.models.Token"></mapping>
+        <mapping class="fr.aireisti.aircontest.models.Upload"></mapping>
 
     </session-factory>
 </hibernate-configuration>
