@@ -45,6 +45,12 @@ public class WorkerListnener implements ServletContextListener, Observer {
         JobInfo jobInfo = new JobInfo();
         if (runnerResult.getStatus() == RunnerResult.SUCCESS) {
             session = HibernateUtil.getSessionFactory().openSession();
+            try {
+                // On attend que l'entrée soit visible dans la bdd parce que pour une quelconque raison des fois ell y est pas.. ?????
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Job job = (Job) session
                     .createQuery("select j from Job j where uuid = :uuid")
                     .setParameter("uuid", runnerResult.getJobId())

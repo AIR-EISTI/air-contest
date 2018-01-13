@@ -16,7 +16,8 @@ public class Serializable {
 
         try {
             tx = session.beginTransaction();
-            session.save(object);
+            session.persist(object);
+            session.flush();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
