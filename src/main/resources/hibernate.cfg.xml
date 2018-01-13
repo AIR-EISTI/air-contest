@@ -33,6 +33,8 @@
         <mapping class="fr.aireisti.aircontest.models.Group"></mapping>
         <mapping class="fr.aireisti.aircontest.models.Tag"></mapping>
         <mapping class="fr.aireisti.aircontest.models.Result"></mapping>
+        <mapping class="fr.aireisti.aircontest.models.JobInfo"></mapping>
+        <mapping class="fr.aireisti.aircontest.models.Job"></mapping>
 
     </session-factory>
 </hibernate-configuration>

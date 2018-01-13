@@ -9,7 +9,7 @@ import javax.ws.rs.sse.Sse;
 import javax.ws.rs.sse.SseBroadcaster;
 import javax.ws.rs.sse.SseEventSink;
 
-import fr.aireisti.aircontest.worker.lib.RunnerResult;
+import fr.aireisti.aircontest.models.JobInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class JobRessource {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     public void getJob(@PathParam("jobId") String jobId, @Context SseEventSink eventSink) {
         if (!JobRessource.broadcasters.containsKey(jobId))
-            throw new NotFoundException("Job doesn't exist.");
+            throw new NotFoundException("JobInfo doesn't exist.");
         SseBroadcaster broadcaster = JobRessource.broadcasters.get(jobId);
         if (broadcaster == null) {
             broadcaster = sse.newBroadcaster();
@@ -38,20 +38,20 @@ public class JobRessource {
         broadcaster.register(eventSink);
     }
 
-    public static void broadcast(RunnerResult runnerResult) {
-        SseBroadcaster broadcaster = JobRessource.broadcasters.get(runnerResult.getJobId());
+    public static void broadcast(JobInfo jobInfo) {
+        SseBroadcaster broadcaster = JobRessource.broadcasters.get(jobInfo.getUuid());
         if (broadcaster == null)
             return;
 
         OutboundSseEvent event = sse.newEventBuilder()
-                .name("runnerResult")
+                .name(jobInfo.getMsgType())
                 .mediaType(MediaType.APPLICATION_JSON_TYPE)
-                .data(RunnerResult.class, runnerResult)
+                .data(JobInfo.class, jobInfo)
                 .build();
 
         broadcaster.broadcast(event);
         broadcaster.close();
-        JobRessource.broadcasters.remove(runnerResult.getJobId());
+        JobRessource.broadcasters.remove(jobInfo.getUuid());
     }
 
     public static void addBroadcaster(String uuid) {

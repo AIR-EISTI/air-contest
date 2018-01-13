@@ -1,5 +1,6 @@
 package fr.aireisti.aircontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
 import fr.aireisti.aircontest.utils.ExercicePkDeserializer;

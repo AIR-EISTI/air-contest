@@ -1,6 +1,7 @@
 package fr.aireisti.aircontest.ressources;
 
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
+import fr.aireisti.aircontest.models.Job;
 import fr.aireisti.aircontest.models.Result;
 import fr.aireisti.aircontest.worker.Sender;
 import org.hibernate.Session;
@@ -27,6 +28,10 @@ public class ResultResource {
                 Sender sender = new Sender();
                 uuid = sender.call("python", result.getCode(), result.getExercice().getInputFile());
                 JobRessource.addBroadcaster(uuid);
+                Job job = new Job();
+                job.setExercice(result.getExercice());
+                job.setUuid(uuid);
+                Serializable.saveObject(job);
             } catch (IOException e) {
                 throw new InternalServerErrorException("Failed to create job");
             } catch (TimeoutException e) {
