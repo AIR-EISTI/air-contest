@@ -16,7 +16,7 @@ public class Serializable {
 
         try {
             tx = session.beginTransaction();
-            session.persist(object);
+            session.save(object);
             session.flush();
             tx.commit();
         } catch (HibernateException e) {
