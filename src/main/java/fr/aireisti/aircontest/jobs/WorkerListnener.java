@@ -3,7 +3,6 @@ package fr.aireisti.aircontest.jobs;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Job;
 import fr.aireisti.aircontest.models.JobInfo;
@@ -35,6 +34,11 @@ public class WorkerListnener implements ServletContextListener, Observer {
 
     public void update(Observable observable, Object o) {
         RunnerResult runnerResult = (RunnerResult) o;
+
+        if (runnerResult.getJobId() == null) {
+            return;
+        }
+
         JobInfo jobInfo = new JobInfo();
         if (runnerResult.getStatus() == RunnerResult.SUCCESS) {
             session = HibernateUtil.getSessionFactory().openSession();
