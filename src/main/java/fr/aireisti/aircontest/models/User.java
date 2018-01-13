@@ -1,13 +1,16 @@
 package fr.aireisti.aircontest.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.aireisti.aircontest.ressources.InitModel;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "USER", catalog = "aircontest")
-public class User {
+public class User implements InitModel{
     private int id;
     private String username;
     private String firstname;
@@ -15,6 +18,7 @@ public class User {
     private Set<Token> tokenSet = new HashSet<>(0);
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
@@ -31,6 +35,7 @@ public class User {
     public String getSurname() {return surname;}
     public void setSurname(String surname) {this.surname = surname;}
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     public Set<Token> getTokenSet() {return tokenSet;}
     public void setTokenSet(Set<Token> tokenSet) {this.tokenSet = tokenSet;}

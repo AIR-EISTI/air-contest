@@ -16,7 +16,7 @@ public class TokenResource {
     @Context
     private UriInfo uriInfo;
 
-    @POST
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response authenticateUser() {
@@ -55,9 +55,11 @@ public class TokenResource {
         OAuthServiceRessource.flows.put(transactionID, flow);
 
         final String lpmngAuthURI = flow.start();
-        System.out.println(lpmngAuthURI);
+
+        Cookie cookieTransaction = new Cookie("TransactionID", transactionID);
+
         return Response.seeOther(UriBuilder.fromUri(lpmngAuthURI).build())
-                .cookie(new NewCookie("TransactionID", transactionID))
+                .cookie(new NewCookie(cookieTransaction, "C'est génial", 3600, false))
                 .build();
     }
 
