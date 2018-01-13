@@ -18,6 +18,7 @@ public class User implements InitModel{
     private Set<Token> tokenSet = new HashSet<>(0);
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     public int getId() {return id;}

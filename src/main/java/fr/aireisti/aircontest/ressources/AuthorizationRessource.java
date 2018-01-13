@@ -2,6 +2,7 @@ package fr.aireisti.aircontest.ressources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
+import fr.aireisti.aircontest.models.OAuthTransaction;
 import fr.aireisti.aircontest.models.Token;
 import fr.aireisti.aircontest.models.User;
 import org.glassfish.jersey.client.oauth2.OAuth2CodeGrantFlow;
@@ -13,6 +14,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,7 +25,7 @@ public class AuthorizationRessource {
     @GET
     @Path("authorize")
     @Produces(MediaType.APPLICATION_JSON)
-    public Token authorize(
+    public Response authorize(
             @QueryParam("code") String code,
             @QueryParam("state") String state,
             @DefaultValue("none")
@@ -33,8 +36,10 @@ public class AuthorizationRessource {
             throw new BadRequestException("Missing cookie");
         }
 
-        final OAuth2CodeGrantFlow flow = OAuthServiceRessource.flows.get(transactionIDCookie);
-        OAuthServiceRessource.flows.remove(transactionIDCookie);
+        OAuthTransaction transaction = OAuthServiceRessource.transaction.get(transactionIDCookie);
+        OAuthServiceRessource.transaction.remove(transactionIDCookie);
+
+        final OAuth2CodeGrantFlow flow = transaction.getFlow();
 
         final TokenResult tokenResult = flow.finish(code, state);
 
@@ -51,7 +56,13 @@ public class AuthorizationRessource {
         token.setUser(user);
         Serializable.saveObject(token);
 
-        return token;
+        URI redirectUri = UriBuilder.fromUri(transaction.getRedirectClientURI())
+                .queryParam("tokenContest", token.getTokenContest())
+                .queryParam("username", user.getUsername())
+                .queryParam("firstname", user.getFirstname())
+                .queryParam("surname", user.getSurname())
+                .build();
+        return Response.seeOther(redirectUri).build();
     }
 
 
