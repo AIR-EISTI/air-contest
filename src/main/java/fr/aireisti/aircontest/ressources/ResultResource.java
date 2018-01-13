@@ -26,12 +26,13 @@ public class ResultResource {
             String uuid;
             try {
                 Sender sender = new Sender();
-                uuid = sender.call("python", result.getCode(), result.getExercice().getInputFile());
+                uuid = sender.prepare("python", result.getCode(), result.getExercice().getInputFile());
                 JobRessource.addBroadcaster(uuid);
                 Job job = new Job();
                 job.setExercice(result.getExercice());
                 job.setUuid(uuid);
                 Serializable.saveObject(job);
+                sender.call();
             } catch (IOException e) {
                 throw new InternalServerErrorException("Failed to create job");
             } catch (TimeoutException e) {
