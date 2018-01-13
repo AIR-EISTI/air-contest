@@ -22,7 +22,7 @@ public class ResultResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postResult(Result result){
-        if (result.getCode() != null) {
+        if (result.getCode() != null && result.getCode().trim().length() > 0) {
             String uuid;
             try {
                 Sender sender = new Sender();

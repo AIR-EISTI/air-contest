@@ -16,8 +16,8 @@ public class JobInfo implements InitModel{
     private String msgInfo;
 
 
-    static public final String TYPE_ERROR = "error";
-    static public final String TYPE_INFO = "info";
+    static public final String TYPE_ERROR = "msg_error";
+    static public final String TYPE_INFO = "msg_info";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -17,6 +17,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WorkerListnener implements ServletContextListener, Observer {
     private ReplyHandler replyHandler;
@@ -24,11 +26,12 @@ public class WorkerListnener implements ServletContextListener, Observer {
 
     public void contextInitialized(ServletContextEvent sce) {
         replyHandler = new ReplyHandler();
-        ((Observable) replyHandler).addObserver(this);
+        replyHandler.addObserver(this);
         replyHandler.start();
     }
 
     public void contextDestroyed(ServletContextEvent sce){
+        Logger.getLogger(WorkerMessage.class.getName()).log(Level.INFO, "Shuting down worker listener.");
         replyHandler.stop();
     }
 
@@ -47,10 +50,15 @@ public class WorkerListnener implements ServletContextListener, Observer {
                     .setParameter("uuid", runnerResult.getJobId())
                     .uniqueResult();
             session.close();
+            if (job == null) {
+                Logger.getLogger(WorkerMessage.class.getName()).log(Level.INFO, "Job " + runnerResult.getJobId() + " is unknown, skipping.");
+                return;
+            }
             Result result = new Result();
             result.setExercice(job.getExercice());
             result.setOutput(runnerResult.getStdout());
             result.computeAccuracy();
+            System.out.println("plo");
             Serializable.saveObject(result);
             if (result.getPoint() == 100) {
                 jobInfo.setMsgType(JobInfo.TYPE_INFO);
