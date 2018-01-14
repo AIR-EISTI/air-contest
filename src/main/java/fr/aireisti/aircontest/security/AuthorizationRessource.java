@@ -17,8 +17,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import java.math.BigInteger;
 import java.net.URI;
+import java.security.SecureRandom;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @Path("oauth")
@@ -54,7 +57,8 @@ public class AuthorizationRessource {
 
         Token token = new Token();
         token.setAccessToken(tokenResult.getAccessToken());
-        token.setTokenContest(UUID.randomUUID().toString());
+        Random random = new SecureRandom();
+        token.setTokenContest(new BigInteger(250, random).toString(32));
         token.setUser(user);
         Serializable.saveObject(token);
 
