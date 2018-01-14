@@ -6,5 +6,6 @@ create table `GROUP` (
   publicationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
   endDate DATETIME DEFAULT NULL,
   points INT DEFAULT NULL,
+  imageUrl TEXT NOT NULL,
   PRIMARY KEY (id)
 );

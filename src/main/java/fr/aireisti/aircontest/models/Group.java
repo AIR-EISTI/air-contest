@@ -19,6 +19,7 @@ public class Group implements InitModel {
     private java.sql.Timestamp publicationDate;
     private java.sql.Timestamp endDate;
     private int points;
+    private String imageUrl;
     private Set<Exercice> exercices = new HashSet<>(0);
 
     @Id
@@ -85,5 +86,14 @@ public class Group implements InitModel {
 
     public void setExercices(Set<Exercice> exercices){
         this.exercices = exercices;
+    }
+
+    @Column(name = "imageUrl", nullable = false)
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

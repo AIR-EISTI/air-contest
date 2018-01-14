@@ -15,7 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 @Path("/result")
@@ -73,13 +75,49 @@ public class ResultResource {
     }
 
     @GET
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Result> getResult(){
+    public List<Result> getResult(@Context SecurityContext securityContext){
         session = HibernateUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.username = :username");
+        query.setParameter("username", securityContext.getUserPrincipal().getName());
+        User user = (User) query.uniqueResult();
+
         String sql = "SELECT r FROM Result r";
-        Query query = session.createQuery(sql);
+
+        if (!user.getRole().equals("Admin")) {
+            sql += " WHERE user_id = :user_id";
+            query = session.createQuery(sql);
+            query.setParameter("user_id", user.getId());
+        } else {
+            query = session.createQuery(sql);
+        }
         List<Result> results = query.list();
         session.close();
         return results;
     }
+
+    @GET
+    @Path("summary")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> getSummary(@Context SecurityContext securityContext) {
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.username = :username");
+        query.setParameter("username", securityContext.getUserPrincipal().getName());
+        User user = (User) query.uniqueResult();
+
+        String hql = "SELECT count(distinct r), sum(r.exercice.points) FROM Result r WHERE user_id = :user_id and point = 100";
+        query = session.createQuery(hql);
+        query.setParameter("user_id", user.getId());
+        Object[] res = (Object[]) query.uniqueResult();
+        session.close();
+        Map<String, Object> map = new HashMap<>();
+        map.put("exoResolus", res[0]);
+        map.put("pointExos", res[1]);
+        return map;
+    }
+
 }
