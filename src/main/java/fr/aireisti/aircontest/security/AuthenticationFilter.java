@@ -27,7 +27,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        System.out.println("plouf");
         // Get the Authorization header from the request
         String authorizationHeader =
                 requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -65,7 +64,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             @Override
             public boolean isUserInRole(String role) {
-                return true;
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                Query query = session.createQuery("SELECT t.user FROM Token t WHERE t.tokenContest = :token");
+                query.setParameter("token", token);
+                User user = (User)query.uniqueResult();
+                session.close();
+                return user.getRole().equals(role);
             }
 
             @Override

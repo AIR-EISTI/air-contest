@@ -6,5 +6,7 @@ CREATE TABLE USER (
   firstname VARCHAR(200) DEFAULT NULL,
   surname VARCHAR(200) DEFAULT NULL,
 
+  role VARCHAR(50) DEFAULT '',
+
   PRIMARY KEY (id)
 );

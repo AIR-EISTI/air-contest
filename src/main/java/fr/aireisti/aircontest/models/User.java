@@ -15,6 +15,7 @@ public class User implements InitModel{
     private String username;
     private String firstname;
     private String surname;
+    private String role = "";
     private Set<Token> tokenSet = new HashSet<>(0);
 
     @Id
@@ -35,6 +36,10 @@ public class User implements InitModel{
     @Column(name = "surname")
     public String getSurname() {return surname;}
     public void setSurname(String surname) {this.surname = surname;}
+
+    @Column(name = "role")
+    public String getRole() {return role;}
+    public void setRole(String role) {this.role = role;}
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
