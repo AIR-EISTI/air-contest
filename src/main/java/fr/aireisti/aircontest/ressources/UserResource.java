@@ -22,6 +22,7 @@ public class UserResource {
         Session hibernateSession;
         hibernateSession = HibernateUtil.getSessionFactory().openSession();
         List<User> users = hibernateSession.createQuery("FROM User").list();
+        hibernateSession.close();
         return users;
     }
 }

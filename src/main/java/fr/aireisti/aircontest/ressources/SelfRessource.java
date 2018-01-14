@@ -23,6 +23,7 @@ public class SelfRessource {
         Query query = session.createQuery("SELECT u FROM User u WHERE u.username = :username");
         query.setParameter("username", securityContext.getUserPrincipal().getName());
         User user = (User) query.uniqueResult();
+        session.close();
 
         return user;
     }

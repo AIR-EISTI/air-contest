@@ -102,6 +102,7 @@ public class AuthorizationRessource {
             query.setParameter("username", userInfos.get("username"));
 
             user = (User)query.uniqueResult();
+            session.close();
         }
         catch (Exception e) {
             e.printStackTrace();

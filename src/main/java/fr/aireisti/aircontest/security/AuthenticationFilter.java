@@ -59,6 +59,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 Query query = session.createQuery("SELECT t.user FROM Token t WHERE t.tokenContest = :token");
                 query.setParameter("token", token);
                 User user = (User)query.uniqueResult();
+                session.close();
                 return () -> user.getUsername();
             }
 
