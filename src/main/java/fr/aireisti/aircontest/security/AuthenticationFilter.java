@@ -21,7 +21,7 @@ import java.security.Principal;
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class CacaFilter implements ContainerRequestFilter {
+public class AuthenticationFilter implements ContainerRequestFilter {
     private static final String REALM = "preview";
     private static final String AUTHENTICATION_SCHEME = "Bearer";
 
