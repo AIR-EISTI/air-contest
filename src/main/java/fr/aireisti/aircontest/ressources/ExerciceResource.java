@@ -129,9 +129,13 @@ public class ExerciceResource {
     }
 
     @GET
+    @Secured
     @Path("{id}/outputFile")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getOutput(@PathParam("id") String id) {
+    public Response getOutput(@PathParam("id") String id, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         Exercice exercice = getExercice(Integer.parseInt(id));
         Response.ResponseBuilder response = Response.ok(exercice.getOutputFile());
         response.header("Content-Disposition", "attachment; filename=\"output_exercice_" + id + ".txt\"");

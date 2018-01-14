@@ -8,10 +8,9 @@ import org.hibernate.Transaction;
 import javax.ws.rs.InternalServerErrorException;
 
 public class Serializable {
-    private static Session session;
 
     public static String saveObject(InitModel object){
-        session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
 
         try {
@@ -30,7 +29,7 @@ public class Serializable {
     }
 
     public static void updateObject(InitModel object, Integer id) {
-        session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
 
         try {
