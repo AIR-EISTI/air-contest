@@ -5,6 +5,7 @@ import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.User;
 import fr.aireisti.aircontest.security.Secured;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
@@ -32,5 +33,21 @@ public class UserResource {
         }
 
         throw new NotAuthorizedException("");
+    }
+
+    @GET
+    @Secured
+    @Path("quantity")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String userQuantity(@Context SecurityContext securityContext) {
+        if (!securityContext.isUserInRole("Admin")) {
+            throw new NotAuthorizedException("");
+        }
+
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        Query query = hibernateSession.createQuery("SELECT COUNT(u) FROM User u");
+        String result = query.uniqueResult().toString();
+        hibernateSession.close();
+        return "{\"quantity\":" + result + "}";
     }
 }

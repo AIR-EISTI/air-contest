@@ -91,7 +91,7 @@ public class UploadRessource {
     public Response deleteUpload(@PathParam("id") String id, @Context SecurityContext securityContext) {
         if ( ! securityContext.isUserInRole("Admin") )
             throw new NotAuthorizedException("");
-        
+
         Integer pk;
         try {
             pk = Integer.parseInt(id);
