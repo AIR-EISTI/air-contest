@@ -24,7 +24,7 @@ public class UploadRessource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String postUpload(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
+    public Upload postUpload(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
         String fileName = fileDetail.getFileName().replaceAll("\\s+", "");
         if (fileName.length() > 50) {
             fileName = fileName.substring(fileName.length() - 50);
@@ -42,7 +42,7 @@ public class UploadRessource {
             throw new InternalServerErrorException("Error while uploading file.");
         }
 
-        return "{\"url\":\"" + fileName + "\"}";
+        return upload;
     }
 
     @GET

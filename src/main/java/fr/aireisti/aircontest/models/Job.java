@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "JOB", catalog = "aircontest")
 public class Job implements InitModel {
     private String uuid;
-    private int userId;
+    private User user;
     private Exercice exercice;
 
     @Id
@@ -23,13 +23,14 @@ public class Job implements InitModel {
         this.uuid = uuid;
     }
 
-    @Column(name = "user")
-    public int getUserId() {
-        return userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id", nullable = false)
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

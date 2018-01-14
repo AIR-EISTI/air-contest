@@ -17,6 +17,7 @@ public class Result implements InitModel{
     private Exercice exercice;
     private String code;
     private String output;
+    private User user;
 
     public Result() {
     }
@@ -52,7 +53,6 @@ public class Result implements InitModel{
     }
 
     @Transient
-    @JsonIgnore
     public String getCode() {
         return code;
     }
@@ -62,7 +62,6 @@ public class Result implements InitModel{
     }
 
     @Transient
-    @JsonIgnore
     public String getOutput() {
         return output;
     }
@@ -74,5 +73,15 @@ public class Result implements InitModel{
     public void computeAccuracy() {
         JaroWinklerDistance distance = new JaroWinklerDistance();
         setPoint((int) Math.floor(distance.apply(output, getExercice().getOutputFile())*100));
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

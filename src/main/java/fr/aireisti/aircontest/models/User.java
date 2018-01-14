@@ -2,7 +2,10 @@ package fr.aireisti.aircontest.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.aireisti.aircontest.ressources.InitModel;
+import fr.aireisti.aircontest.utils.JobPkListDeserializer;
+import fr.aireisti.aircontest.utils.ResultPkListDeserializer;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,6 +20,10 @@ public class User implements InitModel{
     private String surname;
     private String role = "";
     private Set<Token> tokenSet = new HashSet<>(0);
+    @JsonDeserialize(using = ResultPkListDeserializer.class)
+    private Set<Result> results = new HashSet<>(0);
+    @JsonDeserialize(using = JobPkListDeserializer.class)
+    private Set<Job> jobs = new HashSet<>(0);
 
     @Id
     @JsonIgnore
@@ -45,4 +52,24 @@ public class User implements InitModel{
     @OneToMany(mappedBy = "user")
     public Set<Token> getTokenSet() {return tokenSet;}
     public void setTokenSet(Set<Token> tokenSet) {this.tokenSet = tokenSet;}
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
+    public Set<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
+    public Set<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Set<Job> jobs) {
+        this.jobs = jobs;
+    }
 }

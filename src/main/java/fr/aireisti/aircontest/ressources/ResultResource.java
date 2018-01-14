@@ -3,13 +3,17 @@ package fr.aireisti.aircontest.ressources;
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Job;
 import fr.aireisti.aircontest.models.Result;
+import fr.aireisti.aircontest.models.User;
+import fr.aireisti.aircontest.security.Secured;
 import fr.aireisti.aircontest.worker.Sender;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -19,9 +23,18 @@ public class ResultResource {
     private Session session;
 
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postResult(Result result){
+    public Response postResult(Result result, @Context SecurityContext securityContext) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.username = :username");
+        query.setParameter("username", securityContext.getUserPrincipal().getName());
+        User user = (User) query.uniqueResult();
+        session.close();
+
+        result.setUser(user);
+
         if (result.getCode() != null && result.getCode().trim().length() > 0) {
             String uuid;
             try {
@@ -31,6 +44,7 @@ public class ResultResource {
                 Job job = new Job();
                 job.setExercice(result.getExercice());
                 job.setUuid(uuid);
+                job.setUser(user);
                 Serializable.saveObject(job);
                 sender.call();
             } catch (IOException e) {

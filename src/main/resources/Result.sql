@@ -4,6 +4,9 @@ CREATE TABLE RESULT (
   point INT NOT NULL,
   exercice_id INT NOT NULL,
   PRIMARY KEY (id),
+  user_id INT NOT NULL,
   FOREIGN KEY (exercice_id) REFERENCES EXERCICE (id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES USER (id)
     ON DELETE CASCADE
 );

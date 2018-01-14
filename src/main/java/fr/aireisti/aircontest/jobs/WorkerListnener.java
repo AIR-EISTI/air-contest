@@ -57,6 +57,7 @@ public class WorkerListnener implements ServletContextListener, Observer {
             }
             Result result = new Result();
             result.setExercice(job.getExercice());
+            result.setUser(job.getUser());
             result.setOutput(runnerResult.getStdout());
             result.computeAccuracy();
             Serializable.saveObject(result);
