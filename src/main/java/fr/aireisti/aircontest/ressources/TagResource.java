@@ -2,20 +2,27 @@ package fr.aireisti.aircontest.ressources;
 
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Tag;
+import fr.aireisti.aircontest.security.Secured;
 import org.hibernate.Session;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @Path("/tag")
 public class TagResource {
 
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String postTag(Tag tag) {
+    public String postTag(Tag tag, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+        
         return Serializable.saveObject(tag);
     }
 
@@ -49,16 +56,24 @@ public class TagResource {
     }
 
     @PUT
+    @Secured
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putTag(Tag tag, @PathParam("id") Integer id) {
+    public void putTag(Tag tag, @PathParam("id") Integer id, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         Serializable.updateObject(tag, id);
     }
 
     @DELETE
+    @Secured
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteTag(@PathParam("id") String id) {
+    public Response deleteTag(@PathParam("id") String id, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         Integer pk;
         try {
             pk = Integer.parseInt(id);
