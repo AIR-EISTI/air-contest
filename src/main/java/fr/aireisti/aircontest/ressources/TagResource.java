@@ -22,7 +22,7 @@ public class TagResource {
     public String postTag(Tag tag, @Context SecurityContext securityContext) {
         if ( ! securityContext.isUserInRole("Admin") )
             throw new NotAuthorizedException("");
-        
+
         return Serializable.saveObject(tag);
     }
 

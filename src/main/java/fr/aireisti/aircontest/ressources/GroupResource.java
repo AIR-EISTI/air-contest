@@ -2,12 +2,15 @@ package fr.aireisti.aircontest.ressources;
 
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Group;
+import fr.aireisti.aircontest.security.Secured;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @Path("/group")
@@ -40,9 +43,13 @@ public class GroupResource {
     }
 
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String postGroup(Group group){
+    public String postGroup(Group group, @Context SecurityContext securityContext){
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         return Serializable.saveObject(group);
     }
 
@@ -62,8 +69,12 @@ public class GroupResource {
     }
 
     @DELETE
+    @Secured
     @Path("{id}")
-    public void deleteGroupById(@PathParam("id") Integer id){
+    public void deleteGroupById(@PathParam("id") Integer id, @Context SecurityContext securityContext){
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         Query query = session.createQuery("DELETE FROM Group g WHERE g.id=:id");
@@ -74,9 +85,13 @@ public class GroupResource {
     }
 
     @PUT
+    @Secured
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putGroupById(Group group, @PathParam("id") Integer id) {
+    public void putGroupById(Group group, @PathParam("id") Integer id, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         Serializable.updateObject(group, id);
     }
 

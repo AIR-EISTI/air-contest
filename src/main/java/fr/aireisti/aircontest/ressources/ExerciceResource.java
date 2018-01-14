@@ -4,9 +4,12 @@ import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Exercice;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
+import fr.aireisti.aircontest.security.Secured;
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -69,9 +72,13 @@ public class ExerciceResource {
     }
 
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String postExercice(Exercice exercice){
+    public String postExercice(Exercice exercice, @Context SecurityContext securityContext){
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         return Serializable.saveObject(exercice);
     }
 
@@ -148,8 +155,12 @@ public class ExerciceResource {
     }
 
     @DELETE
+    @Secured
     @Path("{id}")
-    public void deleteExerciceById(@PathParam("id") Integer id) {
+    public void deleteExerciceById(@PathParam("id") Integer id, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         Query query = session.createQuery("DELETE FROM Exercice e WHERE e.id = :id");
@@ -160,9 +171,16 @@ public class ExerciceResource {
     }
 
     @PUT
+    @Secured
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putExerciceById(Exercice exercice, @PathParam("id") Integer id){
+    public void putExerciceById(Exercice exercice,
+                                @PathParam("id") Integer id,
+                                @Context SecurityContext securityContext){
+
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         Serializable.updateObject(exercice, id);
     }
 }

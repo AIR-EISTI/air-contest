@@ -3,13 +3,16 @@ package fr.aireisti.aircontest.ressources;
 
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.Upload;
+import fr.aireisti.aircontest.security.Secured;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.hibernate.Session;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -22,9 +25,17 @@ public class UploadRessource {
     public static final String UPLOAD_PATH = "/tmp/";
 
     @POST
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Upload postUpload(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
+    public Upload postUpload(
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail,
+            @Context SecurityContext securityContext) {
+
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+
         String fileName = fileDetail.getFileName().replaceAll("\\s+", "");
         if (fileName.length() > 50) {
             fileName = fileName.substring(fileName.length() - 50);
@@ -75,8 +86,12 @@ public class UploadRessource {
     }
 
     @DELETE
+    @Secured
     @Path("{id}")
-    public Response deleteUpload(@PathParam("id") String id) {
+    public Response deleteUpload(@PathParam("id") String id, @Context SecurityContext securityContext) {
+        if ( ! securityContext.isUserInRole("Admin") )
+            throw new NotAuthorizedException("");
+        
         Integer pk;
         try {
             pk = Integer.parseInt(id);
