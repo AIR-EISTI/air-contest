@@ -1,10 +1,12 @@
-package fr.aireisti.aircontest.ressources;
+package fr.aireisti.aircontest.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.OAuthTransaction;
 import fr.aireisti.aircontest.models.Token;
 import fr.aireisti.aircontest.models.User;
+import fr.aireisti.aircontest.ressources.Serializable;
+import fr.aireisti.aircontest.security.OAuthServiceRessource;
 import org.glassfish.jersey.client.oauth2.OAuth2CodeGrantFlow;
 import org.glassfish.jersey.client.oauth2.TokenResult;
 import org.hibernate.Session;

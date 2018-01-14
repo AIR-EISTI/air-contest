@@ -1,4 +1,4 @@
-package fr.aireisti.aircontest.ressources;
+package fr.aireisti.aircontest.security;
 
 import fr.aireisti.aircontest.models.OAuthTransaction;
 import org.glassfish.jersey.client.oauth2.ClientIdentifier;

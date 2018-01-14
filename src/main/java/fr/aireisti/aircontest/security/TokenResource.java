@@ -1,16 +1,15 @@
-package fr.aireisti.aircontest.ressources;
+package fr.aireisti.aircontest.security;
 
-import fr.aireisti.aircontest.Hibernate.HibernateUtil;
 import fr.aireisti.aircontest.models.OAuthTransaction;
-import fr.aireisti.aircontest.models.Token;
+import fr.aireisti.aircontest.security.OAuthServiceRessource;
+import fr.aireisti.aircontest.security.Secured;
 import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
 import org.glassfish.jersey.client.oauth2.OAuth2CodeGrantFlow;
-import org.hibernate.Session;
 
-import javax.management.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.UUID;
+
 
 @Path("/token")
 public class TokenResource {
