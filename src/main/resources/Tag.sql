@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS TAG_EXERCICE;
 DROP TABLE IF EXISTS TAG;
 create table TAG (
   id INT NOT NULL auto_increment,

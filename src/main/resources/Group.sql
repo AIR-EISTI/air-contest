@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS EXERCICE_GROUP;
 DROP TABLE IF EXISTS `GROUP`;
 create table `GROUP` (
   id INT NOT NULL auto_increment,
